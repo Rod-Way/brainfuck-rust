@@ -10,4 +10,4 @@ you can compile my code or run a [brainfuck.exe file](https://github.com/Rod-Way
 
 ## Examples
 
-> `./brainfuck.exe ./hw.bf`
+```./brainfuck.exe ./hw.bf```
