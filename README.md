@@ -10,6 +10,6 @@ you can compile my code or run a [brainfuck.exe file](https://github.com/Rod-Way
 
 ## Examples
 
-`bash
+`
 ./brainfuck.exe ./hw.bf
 `
