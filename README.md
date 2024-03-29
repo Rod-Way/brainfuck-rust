@@ -2,7 +2,7 @@
 
 ## About
 
-brainfuck-rust is a Brainfuck interpreter written in Rust that based on [brainfuck-c](https://github.com/kgabis/brainfuck-c)
+brainfuck-rust is a Brainfuck interpreter written in Rust and based on [brainfuck-c](https://github.com/kgabis/brainfuck-c)
 
 ## Usage
 
