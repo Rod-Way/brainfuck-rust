@@ -2,6 +2,7 @@ use std::{
     env,
     fs::File,
     io::{stdin, Read},
+    process::exit,
 };
 
 const OP_END: u16 = 0;
@@ -21,34 +22,28 @@ const PROGRAM_SIZE: usize = 4096;
 const STACK_SIZE: usize = 512;
 const DATA_SIZE: usize = 65535;
 
-macro_rules! STACK_PUSH {
-    ($item:expr) => {
-        unsafe {
-            STACK[SP] = $item;
-            SP += 1;
-        }
-    };
+fn stack_push(i: u16) {
+    unsafe {
+        STACK[SP] = i;
+        SP += 1;
+    }
 }
 
-macro_rules! STACK_POP {
-    () => {
-        unsafe {
-            SP -= 1;
-            STACK[SP].into()
-        }
-    };
+fn stack_pop() -> u16 {
+    unsafe {
+        SP -= 1;
+        STACK[SP]
+    }
 }
 
-macro_rules! STACK_EMPTY {
-    () => {
-        unsafe { SP == 0 }
-    };
+fn stack_empty() -> bool {
+    unsafe {
+        return SP == 0;
+    }
 }
 
-macro_rules! STACK_FULL {
-    () => {
-        unsafe { SP == STACK_SIZE }
-    };
+fn stack_full() -> bool {
+    unsafe { SP == STACK_SIZE }
 }
 
 #[derive(Copy, Clone)]
@@ -66,7 +61,7 @@ static mut SP: usize = 0;
 
 fn compile_bf(mut file: File) -> i32 {
     let mut pc: usize = 0;
-    let mut jmp_pc: usize;
+    let mut jmp_pc: u16;
     let mut c = [0; 1];
 
     while let Ok(n) = file.read(&mut c) {
@@ -94,19 +89,19 @@ fn compile_bf(mut file: File) -> i32 {
             },
             '[' => unsafe {
                 PROGRAM[pc].operator = OP_JMP_FWD;
-                if STACK_FULL!() {
+                if stack_full() {
                     return FAILURE;
                 }
-                STACK_PUSH!(pc as u16);
+                stack_push(pc as u16);
             },
             ']' => unsafe {
-                if STACK_EMPTY!() {
+                if stack_empty() {
                     return FAILURE;
                 }
-                jmp_pc = STACK_POP!();
+                jmp_pc = stack_pop();
                 PROGRAM[pc].operator = OP_JMP_BCK;
-                PROGRAM[pc].operand = jmp_pc as u16;
-                PROGRAM[jmp_pc].operand = pc as u16;
+                PROGRAM[pc].operand = jmp_pc;
+                PROGRAM[jmp_pc as usize].operand = pc as u16;
             },
             _default => {
                 pc -= 1;
@@ -114,7 +109,7 @@ fn compile_bf(mut file: File) -> i32 {
         };
         pc += 1;
     }
-    if !STACK_EMPTY!() || pc == PROGRAM_SIZE {
+    if !stack_empty() || pc == PROGRAM_SIZE {
         return FAILURE;
     }
     unsafe {
@@ -179,14 +174,14 @@ fn main() {
 
     if args.len() != 2 {
         eprint!("Error:\n\tNeed args: 2\n\tGot: {}\n", args.len());
-        std::process::exit(FAILURE.into());
+        exit(FAILURE);
     }
 
     let file: File = match File::open(&args[1]) {
         Ok(f) => f,
         Err(_) => {
             eprint!("Error:\n\tFailed to open file: {}\n", args[1]);
-            std::process::exit(FAILURE.into());
+            exit(FAILURE);
         }
     };
     status = compile_bf(file);
@@ -196,6 +191,7 @@ fn main() {
     }
     if status == FAILURE {
         eprint!("Error: Can not compile\n",);
+        exit(FAILURE);
     }
 
     eprint!("Status code: {}\n", status);
