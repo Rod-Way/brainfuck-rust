@@ -6,7 +6,7 @@ brainfuck-rust is a Brainfuck interpreter written in Rust and based on [brainfuc
 
 ## Usage 🛠️
 
-you can compile this code or run a [brainfuck.exe file](https://github.com/Rod-Way/brainfuck-rust/blob/main/target/release/brainfuck.exe)
+you compile this code
 
 ## Examples 🤔
 
