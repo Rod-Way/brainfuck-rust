@@ -6,7 +6,7 @@ brainfuck-rust is a Brainfuck interpreter written in Rust and based on [brainfuc
 
 ## Usage 🛠️
 
-you compile this code
+compile this code
 
 ## Examples 🤔
 
