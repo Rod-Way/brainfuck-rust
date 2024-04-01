@@ -170,17 +170,12 @@ fn execute_bf() -> i32 {
 fn main() {
     let mut status: i32;
 
-    let args: Vec<String> = env::args().collect();
+    let arg_path: String = env::args().nth(1).expect("Error: Need file path");
 
-    if args.len() != 2 {
-        eprint!("Error:\n\tNeed args: 2\n\tGot: {}\n", args.len());
-        exit(FAILURE);
-    }
-
-    let file: File = match File::open(&args[1]) {
+    let file: File = match File::open(&arg_path) {
         Ok(f) => f,
         Err(_) => {
-            eprint!("Error:\n\tFailed to open file: {}\n", args[1]);
+            eprint!("Error:\n\tFailed to open file: {}\n", arg_path);
             exit(FAILURE);
         }
     };
