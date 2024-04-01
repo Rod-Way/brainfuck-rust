@@ -1,9 +1,12 @@
 [package]
-name = "brainfuck"
-version = "0.0.1"
+name = "brainfuck-rust"
+version = "0.0.2"
+authors = ["Rod-Way"]
+description = "brainfuck-rust is a Brainfuck interpreter written in Rust and based on [brainfuck-c](https://github.com/kgabis/brainfuck-c)"
 edition = "2021"
 
 [[bin]]
 doc = false
-name = "brainfuck"
+name = "brainfuck-rust"
+path = "src/main.rs"
 
